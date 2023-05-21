@@ -35,12 +35,44 @@ public:
 		col = _col;
 	};
 
+	table(const table& _table) {
+		row = _table.row;
+		col = _table.col;
+
+		arr = new subTable[row];
+		for (int i = 0; i < row; i++) {
+			arr[i] = subTable(col);
+			for (int j = 0; j < col; j++) {
+				arr[i][j] = _table.arr[i][j];
+			}
+		}
+	};
+
 	subTable& operator[](int j) {
 		return arr[j];
 	}
 
 	const subTable& operator[](int j) const {
 		return arr[j];
+	}
+
+	table& operator=(const table& left) {
+		for (int i = 0; i < row; i++) {
+			delete[](arr[i].subArr);
+		}
+		delete[] arr;
+		
+		row = left.row;
+		col = left.col;
+
+		arr = new subTable[row];
+		for (int i = 0; i < row; i++) {
+			arr[i] = subTable(col);
+			for (int j = 0; j < col; j++) {
+				arr[i][j] = left.arr[i][j];
+			}
+		}
+		return *this;
 	}
 
 	const int Size() const {
@@ -56,7 +88,15 @@ public:
 };
 
 void task_5_2() {
-	table<std::string> test(2, 2);
-	test[1][1] = "eee";
-	std::cout << test[1][1] << " " << test.Size() << std::endl;
+	table<int> x(2, 2);
+	x[0][0] = 55;
+	x[0][1] = 33;
+	std::cout << x[0][0] << " " << x[0][1] << std::endl;
+
+	table<int> y(1, 1);
+	y = x;
+	std::cout << x[0][0] << " " << x[0][1] << std::endl;
+
+	table<int> z(x);
+	std::cout << z[0][0] << " " << z[0][1] << std::endl;
 }
